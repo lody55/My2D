@@ -68,6 +68,11 @@ namespace My2D
         {
             get
             {
+                //공격시 이동 제어
+                if(CannotMove)
+                {
+                    return 0f;
+                }
                 //인풋값이 들어왔을때 and 벽에 부딪히지 않을때
                 if (IsMoving && touchingDirection.IsWall == false)
                 {
@@ -113,8 +118,17 @@ namespace My2D
                 isFacingRight = value;
             }
         }
+        
+        //공격시 이동제어 값 읽어오기
+        public bool CannotMove
+        {
+            get
+            {
+                return animator.GetBool(AnimationString.cannotMove);
+            }
+        }
         #endregion
-
+        
         private void Awake()
         {
             //참조 값

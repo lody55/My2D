@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -12,9 +13,9 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - EnemyHitBox
   - 
   - 
   - 
@@ -44,11 +45,14 @@ TagManager:
   - name: TileMap
     uniqueID: 460221487
     locked: 0
-  - name: Forground
-    uniqueID: 1544867375
+  - name: Enemy
+    uniqueID: 1526628847
     locked: 0
   - name: Player
     uniqueID: 3714054139
+    locked: 0
+  - name: Forground
+    uniqueID: 1544867375
     locked: 0
   - name: Default
     uniqueID: 0

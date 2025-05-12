@@ -1,4 +1,5 @@
 using System;
+using Unity.Jobs;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +14,9 @@ namespace My2D
         public Animator animator;
         //그라운드, 벽 체크
         private TouchingDirection touchingDirection;
+        //참조
+        private Damageable damageable;
+
 
         //이동
         //이동 입력 값
@@ -131,22 +135,32 @@ namespace My2D
         
         private void Awake()
         {
+
             //참조 값
             rb2D = GetComponent<Rigidbody2D>();
             touchingDirection = GetComponent<TouchingDirection>();
+
+            damageable = this.GetComponent<Damageable>();
+
+            //델리게이트 함수 등록
+            damageable.hitAction += OnHit;
         }
 
         private void FixedUpdate()
         {
             //인풋 값에 따라 플레이어 좌우 이동
-            rb2D.linearVelocity = new Vector2(inputMove.x * CurrentSpeed, rb2D.linearVelocity.y);
-
+            if (damageable.LockVelocity == false)
+            {
+                rb2D.linearVelocity = new Vector2(inputMove.x * CurrentSpeed, rb2D.linearVelocity.y);
+            }
+            
             //애니메이터 속도 값 세팅
             animator.SetFloat(AnimationString.yVelocity, rb2D.linearVelocity.y);
         }
 
         public void OnMove(InputAction.CallbackContext context)
         {
+            
             inputMove = context.ReadValue<Vector2>();
             //인풋 값이 들어오면 IsMoving 파라미터 셋팅
 
@@ -205,6 +219,11 @@ namespace My2D
             {
                 animator.SetTrigger(AnimationString.isAttack);
             }
+        }
+        //데미지 입을때 호출되는 함수
+        public void OnHit(float damage , Vector2 knockback)
+        {
+            rb2D.linearVelocity = new Vector2(knockback.x,rb2D.linearVelocity.y + knockback.y);
         }
     }
 }

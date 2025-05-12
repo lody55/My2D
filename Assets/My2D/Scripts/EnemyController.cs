@@ -21,6 +21,7 @@ namespace My2D
         //애니메이터
         public Animator animator;
         public DetectionZone detectionZone; //플레이어 감지
+        private Damageable damageable;
 
         //이동 스피드
         [SerializeField] float moveSpeed = 4f;
@@ -95,6 +96,19 @@ namespace My2D
                 animator.SetBool(AnimationString.hasTarget, value);
             }
         }
+
+        //공격 쿨타임 : 읽어들여서 0보다 크면 3초 타이머를 돌려 0으로 다시 파라미터 값을 세팅
+        public float CooldownTime
+        {
+            get
+            {
+                return animator.GetFloat(AnimationString.cooldownTime);
+            }
+            set
+            {
+                animator.SetFloat(AnimationString.cooldownTime, value);
+            }
+        }
         #endregion
 
 
@@ -104,13 +118,20 @@ namespace My2D
             //참조 값
             rb2D = GetComponent<Rigidbody2D>();
             touchingDirection = GetComponent<TouchingDirection>();
+            damageable = this.GetComponent<Damageable>();
+            damageable.hitAction += OnHit;
 
-            
         }
         private void Update()
         {
             //적감지
-            HasTarget = detectionZone.detectedColliders.Count > 0; 
+            HasTarget = detectionZone.detectedColliders.Count > 0;
+
+            //CooldownTimer
+            if (CooldownTime > 0)
+            {
+                CooldownTime -= Time.deltaTime;
+            }
         }
         private void FixedUpdate()
         {
@@ -119,14 +140,17 @@ namespace My2D
             {
                 Flip();
             }
-            if (CannotMove)
+            if (damageable.LockVelocity == false)
             {
-                rb2D.linearVelocity = new Vector2( Mathf.Lerp(rb2D.linearVelocityX,0f, stopRate) * 0f, rb2D.linearVelocityY);
-            }
-            else
-            {
-                //좌우 이동
-                rb2D.linearVelocity = new Vector2(directionVector.x * moveSpeed, rb2D.linearVelocityY);
+                if (CannotMove)
+                {
+                    rb2D.linearVelocity = new Vector2(Mathf.Lerp(rb2D.linearVelocityX, 0f, stopRate) * 0f, rb2D.linearVelocityY);
+                }
+                else
+                {
+                    //좌우 이동
+                    rb2D.linearVelocity = new Vector2(directionVector.x * moveSpeed, rb2D.linearVelocityY);
+                }
             }
 
         }
@@ -151,6 +175,10 @@ namespace My2D
             {
                 Debug.Log("방향전환 에러");
             }
+        }
+        public void OnHit(float damage, Vector2 knockback)
+        {
+            rb2D.linearVelocity = new Vector2(knockback.x, rb2D.linearVelocity.y + knockback.y);
         }
         #endregion
     }

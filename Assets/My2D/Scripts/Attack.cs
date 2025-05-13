@@ -21,7 +21,7 @@ namespace My2D
             if(damageable != null)
             {
                 //공격하는 캐릭터의 방향에 따라 밀리는 방향설정
-                Vector2 deliveredKnockback = this.transform.parent.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
+                Vector2 deliveredKnockback = this.transform.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
 
 
                 bool isHit = damageable.TakeDamage(attackDamage, deliveredKnockback);

@@ -7,7 +7,7 @@ namespace My2D
         #region Variables
         //공격력
         [SerializeField]private float attackDamage = 10f;
-
+        
         //넉백 효과 - 뒤로 이동
         [SerializeField] private Vector2 knockback = Vector2.zero;
         #endregion

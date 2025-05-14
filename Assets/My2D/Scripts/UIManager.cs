@@ -29,11 +29,13 @@ namespace My2D
         {
             //이벤트 함수에 함수 등록
             CharacterEvents.characterDamage += CharacterTakeDamage;
+            CharacterEvents.characterHeal += CharacterHeal;
         }
         private void OnDisable()
         {
             //이벤트 함수에 등록된 함수 제거
             CharacterEvents.characterDamage -= CharacterTakeDamage;
+            CharacterEvents.characterHeal -= CharacterHeal;
         }
         #endregion
         //데미지 텍스트 프리펩 생성
@@ -61,7 +63,7 @@ namespace My2D
             //프리펩 생성 - 생성된 프리펩의 부모를 Canvas로 지정
             //텍스트에 매개변수로 들어온 힐량 세팅.
             Vector3 spawnPosition = camera.WorldToScreenPoint(character.transform.position);
-            GameObject textGo = Instantiate(damagerTextPrefab, spawnPosition + offset, Quaternion.identity, gameCanvas.transform);
+            GameObject textGo = Instantiate(healTextPrefab, spawnPosition + offset, Quaternion.identity, gameCanvas.transform);
 
             TextMeshProUGUI healText = textGo.GetComponent<TextMeshProUGUI>();
             if(healText)

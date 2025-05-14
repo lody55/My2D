@@ -23,7 +23,7 @@ namespace My2D
             if(updateOnState)
             {
                 animator.SetBool(boolName, valueEnter);
-                Debug.Log("진입");
+                //Debug.Log("진입");
             }
         }
 

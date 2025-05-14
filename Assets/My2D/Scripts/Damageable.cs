@@ -26,9 +26,13 @@ namespace My2D
 
         //델리게이트 이벤트 함수 - 매개변수로 float , vector2가 있는 함수 등록 가능
         public UnityAction<float, Vector2> hitAction;
+
+        
         #endregion
 
         #region Property
+
+
         public float Health
         {
             get
@@ -44,7 +48,7 @@ namespace My2D
                 }
             }
         }
-
+        
         //최대 체력
         public float MaxHealth
         {
@@ -82,6 +86,7 @@ namespace My2D
 
         //hp 풀 체크
         public bool IsHealthFull => Health >= maxHealth;
+        
         #endregion
 
         #region Unity Evenet Method
@@ -155,6 +160,9 @@ namespace My2D
         public bool Heal(float healAmount)
         {
             if (IsDeath || IsHealthFull) return false;
+
+            float beforeHealth = Health;
+
             
 
             Health += healAmount;
@@ -162,10 +170,14 @@ namespace My2D
             {
                 Health = maxHealth;
             }
+            float actualHealth = Health - beforeHealth;
             Debug.Log($"Health : {Health}");
-            CharacterEvents.charactetHeal?.Invoke(gameObject, healAmount);
 
             //UI효과 - 힐 Text 프리펩 생성하는 함수가 등록된 이벤트 함수 호출
+            //Health Text와 Health Bar 관련 함수 호출
+            CharacterEvents.characterHeal?.Invoke(gameObject, actualHealth);
+
+            
             return true;
         }
         #endregion

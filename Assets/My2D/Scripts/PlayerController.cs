@@ -225,5 +225,12 @@ namespace My2D
         {
             rb2D.linearVelocity = new Vector2(knockback.x,rb2D.linearVelocity.y + knockback.y);
         }
+        public void OnBowAttack(InputAction.CallbackContext context)
+        {
+            if(context.started && touchingDirection.IsGround)
+            {
+                animator.SetTrigger(AnimationString.isBowAttack);
+            }
+        }    
     }
 }
